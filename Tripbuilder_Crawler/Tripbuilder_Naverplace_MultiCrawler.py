@@ -296,7 +296,8 @@ class DataPreprocessing():
 
     def Preprocessing(df):
         df['preprocessed_text'] = ''
-
+        spacing = Spacing(rules=['단어'])
+        
         for i in range(len(df)):
             origin = df['review'][i]
             text = re.sub(r'[^\w\s.]', '', origin)

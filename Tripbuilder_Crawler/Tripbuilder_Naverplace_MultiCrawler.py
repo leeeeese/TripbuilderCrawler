@@ -18,6 +18,11 @@ warnings.filterwarnings(action='ignore')
 
 class NaverPlaceUrlCollecter:
 
+    def __init__(self):
+        
+        self.HEADERS = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}
+        
     def UrlCollector(df):
         for i, keyword in enumerate(df['name'].tolist()):
             key = keyword
@@ -73,7 +78,12 @@ class NaverPlaceUrlCollecter:
 
 
 class NaverPlaceReviewCollector():
-
+    
+    def __init__(self):
+        
+        self.HEADERS = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"}
+        
     def NaverPlaceReviewCollector(df):
         count = 0
         current = 0

@@ -76,7 +76,64 @@ class NaverPlaceUrlCollecter:
 
         return df
 
+    def KeywordSearch(keyword_df):
+        place_lst = []
 
+        for i in range(len(keyword_df)):
+            driver.get("https://map.naver.com/v5/search")
+    
+            time.sleep(5)
+            search = driver.find_element(
+                By.CSS_SELECTOR, "#app-layout > div.sc-wli0gr.grTceJ > div > div.sc-iwm9f4.jlCUzI > div > div")
+            time.sleep(1)
+            search_box = search.find_element(
+                By.CSS_SELECTOR, "#input_search1704026641005")
+            time.sleep(2)
+            search_box.send_keys(keyword_df['keyword'][i])  # "마라탕" 자리에 키워드 입력
+            time.sleep(3)
+    
+            search_box.send_keys(Keys.ENTER)
+    
+            for p in range(20):
+                time.sleep(2)
+    
+                js_script = "document.querySelector(\"body > app > layout > div > div.container > div.router-output > "\
+                            "shrinkable-layout > search-layout > search-list > search-list-contents > perfect-scrollbar\").innerHTML"
+                raw = driver.execute_script("return " + js_script)
+    
+                HTML = BeautifulSoup(raw, "html.parser")
+    
+                contents = html.select(
+                    "div > div.ps-content > div > div > div .item_search")
+                for s in contents:
+                    search_box_html = s.select_one(".search_box")
+    
+                    name = search_box_html.select_one(
+                        ".title_box .search_title .search_title_text").text
+    
+                    try:
+                        phone = search_box_html.select_one(
+                            ".search_text_box .phone").text
+                    except:
+                        phone = "NULL"
+    
+                    address = search_box_html.select_one(
+                        ".ng-star-inserted .address").text
+    
+                try:
+                    next_btn = driver.find_element(
+                        By.CSS_SELECTOR, "button.btn_next")
+                    next_btn.click()
+                except:
+                    print("데이터 수집 완료")
+                    break
+
+                place_lst.append([name, phone, address])
+
+        place_df = pd.DataFrame(place_lst, columns=['name', 'phone', 'address'])
+
+        return df
+        
 class NaverPlaceReviewCollector():
     
     def __init__(self):
